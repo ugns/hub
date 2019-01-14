@@ -97,7 +97,7 @@ def populate_target(target_dir=None, bundles={}):
 
 # environment settings
 defaults = [
-    ("ANCHORE_HUB_TARGETDIR", "./targethtml"),
+    ("ANCHORE_HUB_TARGETDIR", "/tmp/targethtml"),
     ("ANCHORE_HUB_TARGETBASEURL", "http://localhost:8080/"),
 ]
 config = {}
@@ -114,5 +114,5 @@ bundles = process_bundles(target_dir=config.get("ANCHORE_HUB_TARGETDIR"), defaul
 print ("Populating target...")
 rc = populate_target(target_dir=config.get("ANCHORE_HUB_TARGETDIR"), bundles=bundles)
 
-print ("Done")
+print ("Done. Config used:\n{}".format(json.dumps(config, sort_keys=True, indent=4)))
 exit(0)

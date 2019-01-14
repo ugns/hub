@@ -89,7 +89,7 @@ def populate_target(target_dir=None, bundles={}):
         dst_file = os.path.join(target_dir, bundlefile)
         copyfile(src_file, dst_file)
 
-    manifestfile = os.path.join(target_dir, "manifest.json")
+    manifestfile = os.path.join(target_dir, "index.json")
     with open(manifestfile, 'w') as OFH:
         OFH.write(json.dumps(manifest, sort_keys=True, indent=4))
 

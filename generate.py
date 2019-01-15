@@ -96,6 +96,7 @@ def populate_target(source_dir=None, target_dir=None, bundles={}):
         with open(src_file, 'r') as FH:
             bundledata = json.loads(FH.read())
             bundledata['name'] = bundlename
+            bundledata['id'] = bundlename
             with open(dst_file, 'w') as OFH:
                 OFH.write(json.dumps(bundledata, indent=4, sort_keys=True))
         #copyfile(src_file, dst_file)

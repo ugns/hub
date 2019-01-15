@@ -6,16 +6,21 @@ import re
 import hashlib
 import time
 import datetime
+import sys
 from shutil import copyfile
 
-def process_bundles(target_dir=None, default_url=None):
+def process_bundles(source_dir=None, target_dir=None, default_url=None):
     bundles = {}
-    bundle_dir = "./bundles"
+    source_dir = source_dir
+    bundle_dir = os.path.join(source_dir, "bundles")
     if os.path.isdir(bundle_dir):
         for bundlefile in os.listdir(bundle_dir):
-            if re.match(".*\.json$", bundlefile):
+            patt = re.match("(.*)\.json$", bundlefile)
+            if patt:
+                bundlename = patt.group(1)
                 thefile = os.path.join(bundle_dir, bundlefile)
                 try:
+                    print ("Processing bundle {}".format(thefile))
                     with open(thefile, 'r') as FH:
                         buf = FH.read()
                         digest = "{}:{}".format("sha256", hashlib.sha256(buf.encode('utf8')).hexdigest())
@@ -42,22 +47,20 @@ def process_bundles(target_dir=None, default_url=None):
                             whitelists.append(i_record)
 
                         bundle_record = {
-                            'location': '/'.join([default_url, 'bundles', bundlefile]),
+                            'location': '/'.join([default_url, 'bundles', bundlename, "{}.json".format(digest)]),
                             'type': 'bundle',
-                            'name': bundle.get('name', 'N/A'),
+                            'name': bundlename,#bundle.get('name', 'N/A'),
                             'description': bundle.get('description', bundle.get('comment', "N/A")),
                             'digest': digest,
                             'policies': policies,
                             'whitelists': whitelists,
                         }
-                        if thefile not in bundles:
-                            bundles[thefile] = []
-                        bundles[thefile].append(bundle_record)
+                        bundles[bundlename] = bundle_record
                 except Exception as err:
                     print("ERROR parsing bundle {} - exception: {}".format(bundlefile, err))
     return(bundles)
 
-def populate_target(target_dir=None, bundles={}):
+def populate_target(source_dir=None, target_dir=None, bundles={}):
 
     # create the manifest
     manifest = {
@@ -72,8 +75,8 @@ def populate_target(target_dir=None, bundles={}):
     manifest['metadata']['digest'] = digest
 
     # prep the target location
-    if not target_dir:
-        raise Exception("empty target_dir passed in")
+    if not target_dir or not source_dir:
+        raise Exception("empty target_dir({}) or source_dir({}) passed in".format(target_dir, source_dir))
 
     if not os.path.isdir(target_dir):
         os.mkdir(target_dir)
@@ -84,10 +87,18 @@ def populate_target(target_dir=None, bundles={}):
             os.mkdir(dst_dir)
 
     # finally, copy/write all input and manifest data to the target location
-    for bundlefile in bundles.keys():
-        src_file = bundlefile
-        dst_file = os.path.join(target_dir, bundlefile)
-        copyfile(src_file, dst_file)
+    for bundlename in bundles.keys():
+        src_file = os.path.join(source_dir, "bundles", "{}.json".format(bundlename))
+        dst_dir = os.path.join(target_dir, "bundles", bundlename)
+        if not os.path.isdir(dst_dir):
+            os.mkdir(dst_dir)
+        dst_file = os.path.join(dst_dir, "{}.json".format(bundles[bundlename]['digest']))
+        with open(src_file, 'r') as FH:
+            bundledata = json.loads(FH.read())
+            bundledata['name'] = bundlename
+            with open(dst_file, 'w') as OFH:
+                OFH.write(json.dumps(bundledata, indent=4, sort_keys=True))
+        #copyfile(src_file, dst_file)
 
     manifestfile = os.path.join(target_dir, "index.json")
     with open(manifestfile, 'w') as OFH:
@@ -98,6 +109,7 @@ def populate_target(target_dir=None, bundles={}):
 # environment settings
 defaults = [
     ("ANCHORE_HUB_TARGETDIR", "/tmp/targethtml"),
+    ("ANCHORE_HUB_SOURCEDIR", "./sources"),
     ("ANCHORE_HUB_TARGETBASEURL", "http://localhost:8080/"),
 ]
 config = {}
@@ -108,11 +120,11 @@ print ("Using config:\n{}".format(json.dumps(config, indent=4, sort_keys=True)))
 
 # process source bundles, returning bundle metadata
 print ("Processing bundles...")
-bundles = process_bundles(target_dir=config.get("ANCHORE_HUB_TARGETDIR"), default_url=config.get("ANCHORE_HUB_TARGETBASEURL"))
+bundles = process_bundles(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"), default_url=config.get("ANCHORE_HUB_TARGETBASEURL"))
 
 # generate target and populate
 print ("Populating target...")
-rc = populate_target(target_dir=config.get("ANCHORE_HUB_TARGETDIR"), bundles=bundles)
+rc = populate_target(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"), bundles=bundles)
 
 print ("Done. Config used:\n{}".format(json.dumps(config, sort_keys=True, indent=4)))
 exit(0)

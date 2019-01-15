@@ -9,7 +9,7 @@ import datetime
 import sys
 from shutil import copyfile
 
-def process_bundles(source_dir=None, target_dir=None, default_url=None):
+def process_bundles(source_dir=None, target_dir=None):
     bundles = {}
     source_dir = source_dir
     bundle_dir = os.path.join(source_dir, "bundles")
@@ -47,7 +47,7 @@ def process_bundles(source_dir=None, target_dir=None, default_url=None):
                             whitelists.append(i_record)
 
                         bundle_record = {
-                            'location': '/'.join([default_url, 'bundles', bundlename, "{}.json".format(digest)]),
+                            'location': '/'.join(['bundles', bundlename, "{}.json".format(digest)]),
                             'type': 'bundle',
                             'name': bundlename,#bundle.get('name', 'N/A'),
                             'description': bundle.get('description', bundle.get('comment', "N/A")),
@@ -121,7 +121,7 @@ print ("Using config:\n{}".format(json.dumps(config, indent=4, sort_keys=True)))
 
 # process source bundles, returning bundle metadata
 print ("Processing bundles...")
-bundles = process_bundles(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"), default_url=config.get("ANCHORE_HUB_TARGETBASEURL"))
+bundles = process_bundles(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"))
 
 # generate target and populate
 print ("Populating target...")

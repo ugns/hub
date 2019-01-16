@@ -55,7 +55,8 @@ jobs:
       - run:
           name: generate static content
           command: |
-            pip3 install jsonschema
+            sudo pip3 install jsonschema
+            ls
             ./generate.py
       - run:
           name: Save static generated site

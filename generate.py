@@ -26,25 +26,25 @@ def process_bundles(source_dir=None, target_dir=None):
                         digest = "{}:{}".format("sha256", hashlib.sha256(buf.encode('utf8')).hexdigest())
                         bundle = json.loads(buf)
 
-                        policies = []
-                        for i in bundle['policies']:
-                            idigest = "{}:{}".format("sha256", hashlib.sha256(json.dumps(i, sort_keys=True).encode('utf8')).hexdigest())
-                            i_record = {
-                                'name': i.get('name', "N/A"),
-                                'description': i.get('description', i.get('comment', "N/A")),
-                                'digest': idigest,
-                            }
-                            policies.append(i_record)
+                        #policies = []
+                        #for i in bundle['policies']:
+                        #    idigest = "{}:{}".format("sha256", hashlib.sha256(json.dumps(i, sort_keys=True).encode('utf8')).hexdigest())
+                        #    i_record = {
+                        #        'name': i.get('name', "N/A"),
+                        #        'description': i.get('description', i.get('comment', "N/A")),
+                        #        'digest': idigest,
+                        #    }
+                        #    policies.append(i_record)
 
-                        whitelists = []
-                        for i in bundle['whitelists']:
-                            idigest = "{}:{}".format("sha256", hashlib.sha256(json.dumps(i, sort_keys=True).encode('utf8')).hexdigest())
-                            i_record = {
-                                'name': i.get('name', "N/A"),
-                                'description': i.get('description', i.get('comment', "N/A")),
-                                'digest': idigest,
-                            }
-                            whitelists.append(i_record)
+                        #whitelists = []
+                        #for i in bundle['whitelists']:
+                        #    idigest = "{}:{}".format("sha256", hashlib.sha256(json.dumps(i, sort_keys=True).encode('utf8')).hexdigest())
+                        #    i_record = {
+                        #        'name': i.get('name', "N/A"),
+                        #        'description': i.get('description', i.get('comment', "N/A")),
+                        #        'digest': idigest,
+                        #    }
+                        #    whitelists.append(i_record)
 
                         bundle_record = {
                             'location': '/'.join(['bundles', bundlename, "{}.json".format(digest)]),
@@ -52,8 +52,8 @@ def process_bundles(source_dir=None, target_dir=None):
                             'name': bundlename,#bundle.get('name', 'N/A'),
                             'description': bundle.get('description', bundle.get('comment', "N/A")),
                             'digest': digest,
-                            'policies': policies,
-                            'whitelists': whitelists,
+                            #'policies': policies,
+                            #'whitelists': whitelists,
                         }
                         bundles[bundlename] = bundle_record
                 except Exception as err:

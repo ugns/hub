@@ -40,18 +40,15 @@ jobs:
           destination: test-reports.log
   generate:
     docker:
-#      - image: docker:stable-git
       - image: circleci/python:3.6
     working_directory: ~/build
     steps:
       - checkout
-#      - setup_remote_docker
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /home/circleci/workspace/caches/
-#      - <<: *load_docker_image
+#      - restore_cache:
+#          keys:
+#            - v1-{{ .Branch }}
+#          paths:
+#            - /home/circleci/workspace/caches/
       - run:
           name: generate static content
           command: |
@@ -64,26 +61,19 @@ jobs:
             rm -rf /home/circleci/workspace/caches/
             mkdir /home/circleci/workspace/caches/ -p
             cp -a /tmp/targethtml /home/circleci/workspace/caches/
-      - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /home/circleci/workspace/caches/
       - persist_to_workspace:
           root: /home/circleci/workspace/
           paths:
             - caches/*
   push_static_site:
     docker:
-#      - image: docker:stable
       - image: circleci/python:3.6
     steps:
-#      - setup_remote_docker
       - <<: *attach_workspace
-#      - <<: *load_docker_image
       - run:
           name: Push static site to S3
           command: |
-            pip3 install awscli
+            sudo pip3 install awscli
             ls /home/circleci/workspace/caches/
             echo aws s3 cp /home/circleci/workspace/caches/targethtml s3://anchore-hub-dev/
 workflows:

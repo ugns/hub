@@ -74,8 +74,8 @@ jobs:
           name: Push static site to S3
           command: |
             sudo pip3 install awscli
-            ls /home/circleci/workspace/caches/
-            echo aws s3 cp /home/circleci/workspace/caches/targethtml s3://anchore-hub-dev/
+            ls /home/circleci/workspace/caches/targethtml/
+            echo aws s3 sync /home/circleci/workspace/caches/targethtml/ s3://anchore-hub-dev/
 workflows:
   version: 2
   default_workflow:

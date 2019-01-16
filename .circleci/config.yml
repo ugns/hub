@@ -84,7 +84,7 @@ jobs:
           command: |
             apk add py-pip
             pip install awscli
-	    ls /home/circleci/workspace/caches/
+            ls /home/circleci/workspace/caches/
             echo aws s3 cp /home/circleci/workspace/caches/targethtml s3://anchore-hub-dev/
 workflows:
   version: 2

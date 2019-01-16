@@ -1,0 +1,108 @@
+# CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/configuration-reference/ for more details
+#
+# Note: YAML anchors allow an object to be re-used, reducing duplication.
+# The ampersand declares an alias for an object, then later the `<<: *name`
+# syntax dereferences it.
+# See http://blog.daemonl.com/2016/02/yaml.html
+# To validate changes, use an online parser, eg.
+# http://yaml-online-parser.appspot.com/
+#
+# Define YAML anchors
+#var_1: &load_docker_image
+#  run:
+#    name: Load Docker image layer cache
+#    command: |
+#      docker load -i /home/circleci/workspace/caches/${CIRCLE_PROJECT_REPONAME}-ci.tar || true
+
+var_1: &attach_workspace
+  attach_workspace:
+    at: /home/circleci/workspace/
+
+# Start circleci configuration
+version: 2
+jobs:
+  unit_tests:
+    working_directory: ~/build/hub-dev
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: sudo pip install pytest jsonschema
+      - run:
+          name: run tests
+          command: pytest test/unit &> test-reports.log
+      - store_artifacts:
+          path: test-reports.log
+          destination: test-reports.log
+  generate:
+    docker:
+      - image: docker:stable-git
+      - image: circleci/python:3.6
+    working_directory: ~/build
+    steps:
+      - checkout
+#      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /home/circleci/workspace/caches/
+#      - <<: *load_docker_image
+      - run:
+          name: generate static content
+          command: |
+            pip install jsonschema
+            ./generate.py
+      - run:
+          name: Save static generated site
+          command: |
+            rm -rf /home/circleci/workspace/caches/
+            mkdir /home/circleci/workspace/caches/ -p
+            cp -a /tmp/targethtml /home/circleci/workspace/caches/
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /home/circleci/workspace/caches/
+      - persist_to_workspace:
+          root: /home/circleci/workspace/
+          paths:
+            - caches/*
+  push_static_site:
+    docker:
+#      - image: docker:stable
+      - image: circleci/python:3.6
+    steps:
+#      - setup_remote_docker
+      - <<: *attach_workspace
+#      - <<: *load_docker_image
+      - run:
+          name: Push static site to S3
+          command: |
+            apk add py-pip
+            pip install awscli
+	    ls /home/circleci/workspace/caches/
+            echo aws s3 cp /home/circleci/workspace/caches/targethtml s3://anchore-hub-dev/
+workflows:
+  version: 2
+  default_workflow:
+    jobs:
+      - unit_tests:
+          filters:
+            branches:
+              only:
+                - master
+      - generate:
+          requires:
+            - unit_tests
+          filters:
+            branches:
+              only:
+                - master
+      - push_static_site:
+          requires:
+            - generate
+

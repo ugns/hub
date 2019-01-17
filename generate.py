@@ -7,12 +7,20 @@ import hashlib
 import time
 import datetime
 import sys
+import yaml
+import jsonref
+import jsonschema
 from shutil import copyfile
 
 def process_bundles(source_dir=None, target_dir=None):
     bundles = {}
     source_dir = source_dir
     bundle_dir = os.path.join(source_dir, "bundles")
+
+    with open("./schemas/anchore-engine-api.yaml", 'r') as FH:
+        anchore_engine_api_swagger = jsonref.loads(json.dumps(yaml.safe_load(FH)))
+        bundleschema = anchore_engine_api_swagger['definitions']['PolicyBundle']
+
     if os.path.isdir(bundle_dir):
         for bundlefile in os.listdir(bundle_dir):
             patt = re.match("(.*)\.json$", bundlefile)
@@ -20,44 +28,30 @@ def process_bundles(source_dir=None, target_dir=None):
                 bundlename = patt.group(1)
                 thefile = os.path.join(bundle_dir, bundlefile)
                 try:
-                    print ("Processing bundle {}".format(thefile))
+                    print ("\tOpening bundle {}...".format(thefile), end='')
                     with open(thefile, 'r') as FH:
+                        print ("done!")
                         buf = FH.read()
                         digest = "{}:{}".format("sha256", hashlib.sha256(buf.encode('utf8')).hexdigest())
                         bundle = json.loads(buf)
+                        
+                        print ("\tValidating bundle {}...".format(thefile), end='')
+                        jsonschema.validate(bundle, bundleschema)
+                        print ("done!")
 
-                        #policies = []
-                        #for i in bundle['policies']:
-                        #    idigest = "{}:{}".format("sha256", hashlib.sha256(json.dumps(i, sort_keys=True).encode('utf8')).hexdigest())
-                        #    i_record = {
-                        #        'name': i.get('name', "N/A"),
-                        #        'description': i.get('description', i.get('comment', "N/A")),
-                        #        'digest': idigest,
-                        #    }
-                        #    policies.append(i_record)
-
-                        #whitelists = []
-                        #for i in bundle['whitelists']:
-                        #    idigest = "{}:{}".format("sha256", hashlib.sha256(json.dumps(i, sort_keys=True).encode('utf8')).hexdigest())
-                        #    i_record = {
-                        #        'name': i.get('name', "N/A"),
-                        #        'description': i.get('description', i.get('comment', "N/A")),
-                        #        'digest': idigest,
-                        #    }
-                        #    whitelists.append(i_record)
-
+                        print ("\tProcessing bundle {}...".format(thefile), end='')
                         bundle_record = {
                             'location': '/'.join(['bundles', bundlename, "{}.json".format(digest)]),
                             'type': 'bundle',
                             'name': bundlename,#bundle.get('name', 'N/A'),
                             'description': bundle.get('description', bundle.get('comment', "N/A")),
                             'digest': digest,
-                            #'policies': policies,
-                            #'whitelists': whitelists,
                         }
                         bundles[bundlename] = bundle_record
+                        print ("done!")
                 except Exception as err:
-                    print("ERROR parsing bundle {} - exception: {}".format(bundlefile, err))
+                    print("\nERROR parsing bundle {} - exception: {}".format(bundlefile, err))
+                    raise err
     return(bundles)
 
 def populate_target(source_dir=None, target_dir=None, bundles={}):
@@ -119,12 +113,21 @@ for e,default in defaults:
 print ("Using config:\n{}".format(json.dumps(config, indent=4, sort_keys=True)))
 
 # process source bundles, returning bundle metadata
-print ("Processing bundles...")
-bundles = process_bundles(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"))
+try:
+    print ("Processing bundles...")
+    bundles = process_bundles(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"))
+    print ("Processing bundles done!")
+except Exception as err:
+    raise Exception("ERROR during bundle processing")
 
 # generate target and populate
-print ("Populating target...")
-rc = populate_target(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"), bundles=bundles)
+try:
+    print ("Populating target...", end='')
+    rc = populate_target(source_dir=config.get("ANCHORE_HUB_SOURCEDIR"), target_dir=config.get("ANCHORE_HUB_TARGETDIR"), bundles=bundles)
+    print ("done!")
+except Exception as err:
+    raise Exception("ERROR during target population")
 
-print ("Done. Config used:\n{}".format(json.dumps(config, sort_keys=True, indent=4)))
+
+print ("All Done. Config used:\n{}".format(json.dumps(config, sort_keys=True, indent=4)))
 exit(0)

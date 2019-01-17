@@ -41,8 +41,7 @@ jobs:
       - run:
           name: generate static content
           command: |
-            sudo pip3 install jsonschema
-            ls
+            sudo pip3 install jsonschema jsonref PyYAML
             ./generate.py
       - run:
           name: Save static generated site
@@ -63,7 +62,7 @@ jobs:
           name: Push static site to S3
           command: |
             sudo pip3 install awscli
-            ls -l /home/circleci/workspace/caches/targethtml/
+            find /home/circleci/workspace/caches/targethtml/
             aws s3 sync /home/circleci/workspace/caches/targethtml/ s3://anchore-hub-staticsite/
 workflows:
   version: 2

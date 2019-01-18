@@ -1,0 +1,319 @@
+{
+    "blacklisted_images": [], 
+    "description": "Docker CIS 1.13.0 image content checks, from section 4.  NOTE: some parameters (generally are named 'example...') must be modified as they require site-specific settings", 
+    "id": "5eb38928-d19f-410a-88d7-70b0a23ab4ef", 
+    "last_updated": 1547770161, 
+    "mappings": [
+        {
+            "id": "042d5b75-ed9d-4fb7-8d41-ec174102f696", 
+            "image": {
+                "type": "tag", 
+                "value": "*"
+            }, 
+            "name": "default", 
+            "policy_ids": [
+                "4f3bdc23-175b-4582-8c7d-3a7d8fa32a12", 
+                "cb417967-266b-4453-bfb6-9acf67b0bee5", 
+                "f2de1d56-c7f1-4b5a-92e0-135a27feae45"
+            ], 
+            "registry": "*", 
+            "repository": "*", 
+            "whitelist_ids": []
+        }
+    ], 
+    "name": "anchore_cis_base", 
+    "policies": [
+        {
+            "comment": "Docker CIS section 4.8 and 4.10 checks.", 
+            "id": "f2de1d56-c7f1-4b5a-92e0-135a27feae45", 
+            "name": "CIS File Checks", 
+            "rules": [
+                {
+                    "action": "WARN", 
+                    "gate": "files", 
+                    "id": "41b657bb-86e5-43ba-8f35-18edc3a465f9", 
+                    "params": [], 
+                    "trigger": "suid_or_guid_set"
+                }, 
+                {
+                    "action": "WARN", 
+                    "gate": "secret_scans", 
+                    "id": "c0e5e302-764d-4b19-9fbd-5c7b0b558673", 
+                    "params": [], 
+                    "trigger": "content_regex_checks"
+                }
+            ], 
+            "version": "1_0"
+        }, 
+        {
+            "comment": "Docker CIS section 4.1, 4.2, 4.6, 4.7 and 4.9 checks.", 
+            "id": "cb417967-266b-4453-bfb6-9acf67b0bee5", 
+            "name": "CIS Dockerfile Checks", 
+            "rules": [
+                {
+                    "action": "WARN", 
+                    "gate": "dockerfile", 
+                    "id": "e9eacc50-aaac-4241-95ac-790cf0be84da", 
+                    "params": [
+                        {
+                            "name": "instruction", 
+                            "value": "ADD"
+                        }, 
+                        {
+                            "name": "check", 
+                            "value": "exists"
+                        }
+                    ], 
+                    "trigger": "instruction"
+                }, 
+                {
+                    "action": "WARN", 
+                    "gate": "dockerfile", 
+                    "id": "2f87d4bf-e963-496a-8b3d-ff90bef46014", 
+                    "params": [
+                        {
+                            "name": "instruction", 
+                            "value": "RUN"
+                        }, 
+                        {
+                            "name": "check", 
+                            "value": "like"
+                        }, 
+                        {
+                            "name": "value", 
+                            "value": "(\\s*/bin/sh\\s*-c\\s*)*\\s*apk.*up(date|grade)\\s*$"
+                        }
+                    ], 
+                    "trigger": "instruction"
+                }, 
+                {
+                    "action": "WARN", 
+                    "gate": "dockerfile", 
+                    "id": "ea1b1c11-0633-48cc-8afc-92b252f331b3", 
+                    "params": [
+                        {
+                            "name": "instruction", 
+                            "value": "RUN"
+                        }, 
+                        {
+                            "name": "check", 
+                            "value": "like"
+                        }, 
+                        {
+                            "name": "value", 
+                            "value": "(\\s*/bin/sh\\s*-c\\s*)*\\s*yum.*up(date|grade)\\s*$"
+                        }
+                    ], 
+                    "trigger": "instruction"
+                }, 
+                {
+                    "action": "WARN", 
+                    "gate": "dockerfile", 
+                    "id": "c5dbe7b8-b48b-4845-beff-069421d9d1ba", 
+                    "params": [
+                        {
+                            "name": "instruction", 
+                            "value": "RUN"
+                        }, 
+                        {
+                            "name": "check", 
+                            "value": "like"
+                        }, 
+                        {
+                            "name": "value", 
+                            "value": "(\\s*/bin/sh\\s*-c\\s*)*\\s*apt(-get)*.*up(date|grade)\\s*$"
+                        }
+                    ], 
+                    "trigger": "instruction"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "dockerfile", 
+                    "id": "64499886-5917-4a41-b18b-7d2d0bdcf12b", 
+                    "params": [
+                        {
+                            "name": "instruction", 
+                            "value": "HEALTHCHECK"
+                        }, 
+                        {
+                            "name": "check", 
+                            "value": "not_exists"
+                        }
+                    ], 
+                    "trigger": "instruction"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "dockerfile", 
+                    "id": "f2b27bac-37e5-4ed2-b3f6-da7c76748b49", 
+                    "params": [
+                        {
+                            "name": "instruction", 
+                            "value": "FROM"
+                        }, 
+                        {
+                            "name": "check", 
+                            "value": "not_in"
+                        }, 
+                        {
+                            "name": "value", 
+                            "value": "example_trusted_base1,example_trusted_base2"
+                        }, 
+                        {
+                            "name": "actual_dockerfile_only", 
+                            "value": "false"
+                        }
+                    ], 
+                    "trigger": "instruction"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "dockerfile", 
+                    "id": "c96bf84d-0e76-435c-a94c-0f556bbaf45f", 
+                    "params": [
+                        {
+                            "name": "users", 
+                            "value": "root,docker"
+                        }, 
+                        {
+                            "name": "type", 
+                            "value": "blacklist"
+                        }
+                    ], 
+                    "trigger": "effective_user"
+                }
+            ], 
+            "version": "1_0"
+        }, 
+        {
+            "comment": "Docker CIS section 4.3 and 4.4 checks.", 
+            "id": "4f3bdc23-175b-4582-8c7d-3a7d8fa32a12", 
+            "name": "CIS Software Checks", 
+            "rules": [
+                {
+                    "action": "WARN", 
+                    "gate": "packages", 
+                    "id": "5991ec11-fd80-4066-ba92-96e2db98dde6", 
+                    "params": [
+                        {
+                            "name": "name", 
+                            "value": "example_blacklisted_package_2"
+                        }, 
+                        {
+                            "name": "version", 
+                            "value": "1.0.0"
+                        }
+                    ], 
+                    "trigger": "blacklist"
+                }, 
+                {
+                    "action": "WARN", 
+                    "gate": "packages", 
+                    "id": "94a6cbb5-66b0-4bc7-b1dc-6293cca251a7", 
+                    "params": [
+                        {
+                            "name": "name", 
+                            "value": "example_blacklisted_package_1"
+                        }
+                    ], 
+                    "trigger": "blacklist"
+                }, 
+                {
+                    "action": "WARN", 
+                    "gate": "vulnerabilities", 
+                    "id": "8955f515-60e2-4483-bdf4-2fe475fe0c8c", 
+                    "params": [
+                        {
+                            "name": "package_type", 
+                            "value": "all"
+                        }, 
+                        {
+                            "name": "severity_comparison", 
+                            "value": "<="
+                        }, 
+                        {
+                            "name": "severity", 
+                            "value": "negligible"
+                        }, 
+                        {
+                            "name": "vendor_only", 
+                            "value": "true"
+                        }
+                    ], 
+                    "trigger": "package"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "vulnerabilities", 
+                    "id": "0821c410-b0d4-4a25-90d7-aa71b46d7e32", 
+                    "params": [
+                        {
+                            "name": "package_type", 
+                            "value": "all"
+                        }, 
+                        {
+                            "name": "severity_comparison", 
+                            "value": ">="
+                        }, 
+                        {
+                            "name": "severity", 
+                            "value": "low"
+                        }, 
+                        {
+                            "name": "vendor_only", 
+                            "value": "true"
+                        }
+                    ], 
+                    "trigger": "package"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "vulnerabilities", 
+                    "id": "211fa08b-e69a-4165-a0df-05cd3bd0e002", 
+                    "params": [
+                        {
+                            "name": "package_type", 
+                            "value": "all"
+                        }, 
+                        {
+                            "name": "severity_comparison", 
+                            "value": ">="
+                        }, 
+                        {
+                            "name": "severity", 
+                            "value": "unknown"
+                        }, 
+                        {
+                            "name": "fix_available", 
+                            "value": "true"
+                        }
+                    ], 
+                    "trigger": "package"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "vulnerabilities", 
+                    "id": "e3a73079-fe16-4de6-9b2f-3982277e57d5", 
+                    "params": [
+                        {
+                            "name": "max_days_since_sync", 
+                            "value": "2"
+                        }
+                    ], 
+                    "trigger": "stale_feed_data"
+                }, 
+                {
+                    "action": "STOP", 
+                    "gate": "vulnerabilities", 
+                    "id": "aeff8bdb-82b5-44fd-87ef-d8fdd50893e8", 
+                    "params": [], 
+                    "trigger": "vulnerability_data_unavailable"
+                }
+            ], 
+            "version": "1_0"
+        }
+    ], 
+    "version": "1_0", 
+    "whitelisted_images": [], 
+    "whitelists": []
+}

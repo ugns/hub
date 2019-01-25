@@ -1,10 +1,11 @@
 {
     "blacklisted_images": [], 
-    "description": "Docker CIS 1.13.0 image content checks, from section 4.  NOTE: some parameters (generally are named 'example...') must be modified as they require site-specific settings", 
+    "description": "Docker CIS 1.13.0 image content checks, from section 4 and 5. NOTE: some parameters (generally are named 'example...') must be modified as they require site-specific settings", 
     "id": "anchore_cis_1.13.0_base", 
     "last_updated": 1548367719, 
     "mappings": [
         {
+            "comment": "default mapping that matches all registry/repo:tag images",
             "id": "042d5b75-ed9d-4fb7-8d41-ec174102f696", 
             "image": {
                 "type": "tag", 
@@ -32,6 +33,7 @@
             "name": "CIS File Checks", 
             "rules": [
                 {
+                    "comment": "section 4.8",
                     "action": "WARN", 
                     "gate": "files", 
                     "id": "41b657bb-86e5-43ba-8f35-18edc3a465f9", 
@@ -39,6 +41,7 @@
                     "trigger": "suid_or_guid_set"
                 }, 
                 {
+                    "comment": "section 4.10",
                     "action": "WARN", 
                     "gate": "secret_scans", 
                     "id": "c0e5e302-764d-4b19-9fbd-5c7b0b558673", 
@@ -55,7 +58,7 @@
             "rules": [
                 {
                     "action": "STOP", 
-                    "comment": "example for allowing only whitelisted exposed ports 12345, 23456", 
+                    "comment": "section 5.8. example for allowing only whitelisted exposed ports 12345, 23456", 
                     "gate": "dockerfile", 
                     "id": "ef85285b-801b-48a4-b130-3a35e2d58133", 
                     "params": [
@@ -71,6 +74,8 @@
                     "trigger": "exposed_ports"
                 }, 
                 {
+                    "comment": "section 4.9",
+                    "comment": "section",
                     "action": "WARN", 
                     "gate": "dockerfile", 
                     "id": "e9eacc50-aaac-4241-95ac-790cf0be84da", 
@@ -87,6 +92,7 @@
                     "trigger": "instruction"
                 }, 
                 {
+                    "comment": "section 4.7",
                     "action": "WARN", 
                     "gate": "dockerfile", 
                     "id": "2f87d4bf-e963-496a-8b3d-ff90bef46014", 
@@ -107,6 +113,7 @@
                     "trigger": "instruction"
                 }, 
                 {
+                    "comment": "section 4.7",
                     "action": "WARN", 
                     "gate": "dockerfile", 
                     "id": "ea1b1c11-0633-48cc-8afc-92b252f331b3", 
@@ -127,6 +134,7 @@
                     "trigger": "instruction"
                 }, 
                 {
+                    "comment": "section 4.7",
                     "action": "WARN", 
                     "gate": "dockerfile", 
                     "id": "c5dbe7b8-b48b-4845-beff-069421d9d1ba", 
@@ -147,6 +155,7 @@
                     "trigger": "instruction"
                 }, 
                 {
+                    "comment": "section 4.6",
                     "action": "STOP", 
                     "gate": "dockerfile", 
                     "id": "64499886-5917-4a41-b18b-7d2d0bdcf12b", 
@@ -163,6 +172,7 @@
                     "trigger": "instruction"
                 }, 
                 {
+                    "comment": "section 4.2",
                     "action": "STOP", 
                     "gate": "dockerfile", 
                     "id": "f2b27bac-37e5-4ed2-b3f6-da7c76748b49", 
@@ -187,6 +197,7 @@
                     "trigger": "instruction"
                 }, 
                 {
+                    "comment": "section 4.1",
                     "action": "STOP", 
                     "gate": "dockerfile", 
                     "id": "c96bf84d-0e76-435c-a94c-0f556bbaf45f", 
@@ -211,6 +222,7 @@
             "name": "CIS Software Checks", 
             "rules": [
                 {
+                    "comment": "section 4.3",
                     "action": "WARN", 
                     "gate": "packages", 
                     "id": "5991ec11-fd80-4066-ba92-96e2db98dde6", 
@@ -227,6 +239,7 @@
                     "trigger": "blacklist"
                 }, 
                 {
+                    "comment": "section 4.3",
                     "action": "WARN", 
                     "gate": "packages", 
                     "id": "94a6cbb5-66b0-4bc7-b1dc-6293cca251a7", 
@@ -239,6 +252,7 @@
                     "trigger": "blacklist"
                 }, 
                 {
+                    "comment": "section 4.4",
                     "action": "WARN", 
                     "gate": "vulnerabilities", 
                     "id": "8955f515-60e2-4483-bdf4-2fe475fe0c8c", 
@@ -263,6 +277,7 @@
                     "trigger": "package"
                 }, 
                 {
+                    "comment": "section 4.4",
                     "action": "STOP", 
                     "gate": "vulnerabilities", 
                     "id": "0821c410-b0d4-4a25-90d7-aa71b46d7e32", 
@@ -287,6 +302,7 @@
                     "trigger": "package"
                 }, 
                 {
+                    "comment": "section 4.4",
                     "action": "STOP", 
                     "gate": "vulnerabilities", 
                     "id": "211fa08b-e69a-4165-a0df-05cd3bd0e002", 
@@ -311,6 +327,7 @@
                     "trigger": "package"
                 }, 
                 {
+                    "comment": "section 4.4",
                     "action": "STOP", 
                     "gate": "vulnerabilities", 
                     "id": "e3a73079-fe16-4de6-9b2f-3982277e57d5", 
@@ -323,6 +340,7 @@
                     "trigger": "stale_feed_data"
                 }, 
                 {
+                    "comment": "section 4.4",
                     "action": "STOP", 
                     "gate": "vulnerabilities", 
                     "id": "aeff8bdb-82b5-44fd-87ef-d8fdd50893e8", 

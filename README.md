@@ -45,17 +45,17 @@ anchore_cis_1.13.0_base        Docker CIS 1.13.0 image               2019-01-25T
                                'example...') must be modified                                          
                                as they require site-specific                                           
                                settings                                                                
-#
+
 # anchore-cli policy hub get anchore_cis_1.13.0_base > /tmp/anchore_cis_1.13.0_base.json
 # <use favorite editor to look at the raw bundle document itself>
-#
+
 # anchore-cli policy hub install anchore_cis_1.13.0_base
 Policy ID: anchore_cis_1.13.0_base
 Active: False
 Source: local
 Created: 2019-01-28T18:31:52Z
 Updated: 2019-01-28T18:31:52Z
-#
+
 # anchore-cli policy list
 Policy ID                                   Active        Created                     Updated                     
 fff177bd-5661-4d4a-a740-f797ef25d75f        True          2018-11-30T01:09:44Z        2019-01-24T21:12:16Z        
@@ -64,7 +64,7 @@ fff177bd-5661-4d4a-a740-f797ef25d75f        True          2018-11-30T01:09:44Z  
 anchore_cis_1.13.0_base                     False         2019-01-28T18:31:52Z        2019-01-28T18:31:52Z        
 ...
 ...
-#
+
 ```
 
 From here, you can now interact with the installed anchore policy bundle using anchore-cli, Anchore Enterprise UI, or the anchore engine API directly.
@@ -76,6 +76,44 @@ By default, when new resources are stored in this repository, or modifications a
 For example, if a local hub has been populated at a local URL "http://myhost.com/anchorehub", the anchore-cli can be configured to use that location (initially looking for "http://myhost.com/anchorehub/index.json") instead of the default:
 
 ```
+# cd ./hub
+# ./generate.py
+Using config:
+{
+    "ANCHORE_HUB_SOURCEDIR": "./sources",
+    "ANCHORE_HUB_TARGETDIR": "/tmp/targethtml"
+}
+Processing bundles...
+	Opening bundle ./sources/bundles/anchore_default_bundle.json...done!
+	Validating bundle ./sources/bundles/anchore_default_bundle.json...done!
+	Processing bundle ./sources/bundles/anchore_default_bundle.json...done!
+	Opening bundle ./sources/bundles/anchore_security_only.json...done!
+	Validating bundle ./sources/bundles/anchore_security_only.json...done!
+	Processing bundle ./sources/bundles/anchore_security_only.json...done!
+	Opening bundle ./sources/bundles/anchore_cis_1.13.0_base.json...done!
+	Validating bundle ./sources/bundles/anchore_cis_1.13.0_base.json...done!
+	Processing bundle ./sources/bundles/anchore_cis_1.13.0_base.json...done!
+Processing bundles done!
+Populating target...done!
+All Done. Config used:
+{
+    "ANCHORE_HUB_SOURCEDIR": "./sources",
+    "ANCHORE_HUB_TARGETDIR": "/tmp/targethtml"
+}
+
+# find /tmp/targethtml/
+/tmp/targethtml/
+/tmp/targethtml/bundles
+/tmp/targethtml/bundles/anchore_default_bundle
+/tmp/targethtml/bundles/anchore_default_bundle/sha256:27c2c06db79dafdf4c2b51f489c2b1a55f86396470de3613cfb80201ec71da55.json
+/tmp/targethtml/bundles/anchore_security_only
+/tmp/targethtml/bundles/anchore_security_only/sha256:f9a08c92a04eb9575d98c41e0b72af23f194305592acdf95f9fe92f1c415550a.json
+/tmp/targethtml/bundles/anchore_cis_1.13.0_base
+/tmp/targethtml/bundles/anchore_cis_1.13.0_base/sha256:fcd085e288aefb5412cf55529fdbb8ae7c57ad3bc46946263db517e875788582.json
+/tmp/targethtml/index.json
+
+# <perform steps to host static HTTP site based on output structure above, so that http://myhost.com/anchorehub/index.json is fetchable>
+
 # export ANCHORE_CLI_HUB_URL=http://myhost.com/anchorehub"
 # anchore-cli policy hub list
 <list of your locally generated hub documents>

@@ -27,7 +27,7 @@ To modify an existing policy bundle, the steps are the same as above, replacing 
 
 ## Using the Hub
 
-All bundles in this repository are automatically served via a publicly accessible HTTP service.  Presently, the Anchore CLI is a client that includes an operation for interacting with the hub, allowing available bundles to be listed, fetched (for review) or directly installed into a local anchore engine deployment.  A quick example of interacting with the hub follows:
+All bundles in this repository are automatically served via a publicly accessible HTTP service.  Presently, the [Anchore CLI](https://github.com/anchore/anchore-cli)(version >= 0.3.2) is a client that includes operations for interacting with the hub, allowing available bundles to be listed, fetched (for review) or directly installed into a local anchore engine deployment.  A quick example of interacting with the hub follows:
 
 ```
 # anchore-cli policy hub list

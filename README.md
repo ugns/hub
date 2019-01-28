@@ -28,7 +28,7 @@ To modify an existing policy bundle, the steps are the same as above, replacing 
 
 All bundles in this repository are automatically served via a publicly accessible HTTP service.  Presently, the Anchore CLI is a client that includes an operation for interacting with the hub, allowing available bundles to be listed, fetched (for review) or directly installed into a local anchore engine deployment.  A quick example of interacting with the hub follows:
 
-`
+```
 # anchore-cli policy hub list
 ame                           Description                           Updated                           
 anchore_security_only          Includes a single policy that         2019-01-25T01:08:47.518134        
@@ -64,7 +64,7 @@ anchore_cis_1.13.0_base                     False         2019-01-28T18:31:52Z  
 ...
 ...
 #
-`
+```
 
 From here, you can now interact with the installed anchore policy bundle using anchore-cli, Anchore Enterprise UI, or the anchore engine API directly.
 
@@ -74,8 +74,8 @@ By default, when new resources are stored in this repository, or modifications a
 
 For example, if a local hub has been populated at a local URL "http://myhost.com/anchorehub", the anchore-cli can be configured to use that location (initially looking for "http://myhost.com/anchorehub/index.json") instead of the default:
 
-`
+```
 # export ANCHORE_CLI_HUB_URL=http://myhost.com/anchorehub"
 # anchore-cli policy hub list
 <list of your locally generated hub documents>
-`
+```

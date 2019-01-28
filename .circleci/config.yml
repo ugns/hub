@@ -63,7 +63,7 @@ jobs:
           command: |
             sudo pip3 install awscli
             find /home/circleci/workspace/caches/targethtml/
-            aws s3 sync /home/circleci/workspace/caches/targethtml/ s3://anchore-hub-staticsite/
+            aws s3 sync /home/circleci/workspace/caches/targethtml/ s3://hub.anchore.io/
 workflows:
   version: 2
   default_workflow:

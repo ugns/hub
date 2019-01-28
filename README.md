@@ -15,10 +15,11 @@ The important items in this repo are as follows:
 
 To submit a new policy bundle for consideration, the process at a high level should be:
 
-1. create/modify a anchore policy bundle, and remove any site-specific information from the bundle document ideally
-2. clone a version of this repository locally, and put your new bundle in the sources/bundles/ directory, using a unique name for the bundle that reflects it's purpose (i.e. anchore_dockerfile_bestpractive_checks.json)
-3. run the './generate.py' script locally to perform validation of the new bundle, and inspect the output bundle to ensure it is correct (by default, ./generate.py will create a static site in /tmp/targethtml for inspection/test)
-4. Create a PR with the new bundle included, including an explaination of the new bundle and it's purpose
+1. Read and accept the terms of the [contributor agreement](https://github.com/anchore/hub-dev/blob/master/CONTRIBUTING.rst)
+2. create/modify a anchore policy bundle, and remove any site-specific information from the bundle document ideally
+3. clone a version of this repository locally, and put your new bundle in the sources/bundles/ directory, using a unique name for the bundle that reflects it's purpose (i.e. anchore_dockerfile_bestpractive_checks.json)
+4. run the './generate.py' script locally to perform validation of the new bundle, and inspect the output bundle to ensure it is correct (by default, ./generate.py will create a static site in /tmp/targethtml for inspection/test)
+5. Create a PR with the new bundle included, including an explaination of the new bundle and it's purpose.  Be sure to sign off on the PR according the the [contributor agreement](https://github.com/anchore/hub-dev/blob/master/CONTRIBUTING.rst).
 
 ## Modifying an Existing Policy
 

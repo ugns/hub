@@ -1,6 +1,6 @@
 # Anchore Hub
 
-The Anchore Hub is a repository of resources that can be served and then loaded into/consumed by Anchore Engine, via clients of the Anchore Engine.  This repository servers as the canonical store of source documents (initially Anchore Policy Bundles), both serving as a location where pre-defined policy bundles can be easily fetched and loaded into Anchore Engine deployments, as well as a location where users of Anchore can submit new policy bundles and, in the future, other Anchore resources as well.
+The Anchore Hub is a centralized repository of resources that are served and then can be loaded into/consumed by [Anchore Engine](https://github.com/anchore/anchore-engine), via anchore engine clients.  This repository serves as the canonical store of source documents (initially, [Anchore Policy Bundles](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)), both serving as a location where pre-defined policy bundles can be easily fetched and loaded into Anchore Engine deployments to help with a starting point for creating your own bundles, as well as a location where users of Anchore can submit and share new policy bundles and, moving forward, other Anchore resources as well.
 
 ## Structure
 

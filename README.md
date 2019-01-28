@@ -46,7 +46,32 @@ anchore_cis_1.13.0_base        Docker CIS 1.13.0 image               2019-01-25T
                                as they require site-specific                                           
                                settings                                                                
 
-# anchore-cli policy hub get anchore_cis_1.13.0_base > /tmp/anchore_cis_1.13.0_base.json
+# anchore-cli policy hub get anchore_cis_1.13.0_base 
+Policy Bundle ID: anchore_cis_1.13.0_base
+Name: anchore_cis_1.13.0_base
+Description: Docker CIS 1.13.0 image content checks, from section 4 and 5. NOTE: some parameters (generally are named 'example...') must be modified as they require site-specific settings
+
+Policy Name: CIS File Checks
+Policy Description: Docker CIS section 4.8 and 4.10 checks.
+
+Policy Name: CIS Dockerfile Checks
+Policy Description: Docker CIS section 4.1, 4.2, 4.6, 4.7, 4.9 and 5.8 checks.
+
+Policy Name: CIS Software Checks
+Policy Description: Docker CIS section 4.3 and 4.4 checks.
+
+Whitelist Name: suid-wl-rhel
+Whitelist Description: Example whitelist with triggerIds of files that are expected to have SUID/SGID, for rhel-based images
+
+Whitelist Name: suid-wl-debian
+Whitelist Description: Example whitelist with triggerIds of files that are expected to have SUID/SGID, for debian-based images
+
+Mapping Name: default
+Mapping Rule: */*:*
+Mapping Policies: CIS Software Checks,CIS Dockerfile Checks,CIS File Checks
+Mapping Whitelists: suid-wl-debian,suid-wl-rhel
+
+# anchore-cli --json policy hub get anchore_cis_1.13.0_base > /tmp/anchore_cis_1.13.0_base.json
 # <use favorite editor to look at the raw bundle document itself>
 
 # anchore-cli policy hub install anchore_cis_1.13.0_base

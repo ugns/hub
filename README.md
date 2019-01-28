@@ -13,7 +13,7 @@ The important items in this repo are as follows:
 
 ## Submitting a New Policy 
 
-To submit a new policy bundle for consideration, the process at a high level should be:
+Before you being, please take care not to include any sensitive information in any documents that are submitted to this (publicly hosted) repository).  If you wish to centrally manage your own private hub, see the instructions at the end of this guide to understand how to host your own instance of an anchore hub.  To submit a new policy bundle for consideration, the process at a high level should be:
 
 1. Read and accept the terms of the [contributor agreement](https://github.com/anchore/hub-dev/blob/master/CONTRIBUTING.rst)
 2. create/modify a anchore policy bundle, and remove any site-specific information from the bundle document ideally

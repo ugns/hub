@@ -31,21 +31,17 @@ All bundles in this repository are automatically served via a publicly accessibl
 
 ```
 # anchore-cli policy hub list
-ame                           Description                           Updated                           
-anchore_security_only          Includes a single policy that         2019-01-25T01:08:47.518134        
-                               only performs a variety of                                              
-                               security checks.                                                        
-anchore_default_bundle         Default Anchore Engine policy         2019-01-25T01:08:47.518134        
-                               checks, single mapping for all                                          
-                               images, empty whitelist.                                                
-anchore_cis_1.13.0_base        Docker CIS 1.13.0 image               2019-01-25T01:08:47.518134        
-                               content checks, from section 4                                          
-                               and 5. NOTE: some parameters                                            
-                               (generally are named                                                    
-                               'example...') must be modified                                          
-                               as they require site-specific                                           
-                               settings                                                                
-
+Name                           Description                                                        
+anchore_security_only          Includes a single policy that only performs a variety of           
+                               security checks.                                                   
+anchore_default_bundle         Default policy bundle that comes installed with vanilla            
+                               anchore-engine deployments.  Mixture of light vulnerability        
+                               checks, dockerfiles checks, and warning triggers for common        
+                               best practices.                                                    
+anchore_cis_1.13.0_base        Docker CIS 1.13.0 image content checks, from section 4 and         
+                               5. NOTE: some parameters (generally are named 'example...')        
+                               must be modified as they require site-specific settings            
+                       
 # anchore-cli policy hub get anchore_cis_1.13.0_base 
 Policy Bundle ID: anchore_cis_1.13.0_base
 Name: anchore_cis_1.13.0_base

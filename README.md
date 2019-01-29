@@ -94,7 +94,7 @@ From here, you can now interact with the installed anchore policy bundle using a
 
 By default, when new resources are stored in this repository, or modifications are made, an automated process is executed to execute ./generate.py and serve the content via a publicly available site hosted at (TBD).  Alternatively, you may opt to run your own, internal, anchore hub using the tools in this repo, serving the data output by ./generate.py from any HTTP service you operate.  The clients (such as anchore-cli) can then be directed at this new location instead of the default public hub URL, and the rest of the operations will perform as described above. 
 
-For example, if a local hub has been populated at a local URL "http://myhost.com/anchorehub", the anchore-cli can be configured to use that location (initially looking for "http://myhost.com/anchorehub/index.json") instead of the default:
+Below is an example process for running a local anchore hub using a docker nginx container, for testing and to illustrate the general process.  Permanent installations would use a similiar process but host the generated static content in a permanent HTTP server location instead of a local nginx container location:
 
 ```
 # cd ./hub
@@ -133,9 +133,11 @@ All Done. Config used:
 /tmp/targethtml/bundles/anchore_cis_1.13.0_base/sha256:fcd085e288aefb5412cf55529fdbb8ae7c57ad3bc46946263db517e875788582.json
 /tmp/targethtml/index.json
 
-# <perform steps to host static HTTP site based on output structure above, so that http://myhost.com/anchorehub/index.json is fetchable>
+# docker run --name anchore-hub-nginx -v /tmp/targethtml/:/usr/share/nginx/html/:ro -p 8080:80 -d nginx
 
-# export ANCHORE_CLI_HUB_URL=http://myhost.com/anchorehub"
+# export ANCHORE_CLI_HUB_URL=http://localhost:8080/"
 # anchore-cli policy hub list
-<list of your locally generated hub documents>
+...
+...
+...
 ```

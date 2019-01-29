@@ -1,10 +1,10 @@
-# Anchore Hub
+# Anchore Policy Hub
 
-The Anchore Hub is a centralized repository of resources that are served and then can be loaded into/consumed by [Anchore Engine](https://github.com/anchore/anchore-engine), via anchore engine clients.  This repository serves as the canonical store of source documents (initially, [Anchore Policy Bundles](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)), both serving as a location where pre-defined policy bundles can be easily fetched and loaded into Anchore Engine deployments to help with a starting point for creating your own bundles, as well as a location where users of Anchore can submit and share new policy bundles and, moving forward, other Anchore resources as well.
+The Anchore Policy Hub is a centralized repository of resources that are served and then can be loaded into/consumed by [Anchore Engine](https://github.com/anchore/anchore-engine), via anchore engine clients.  This repository serves as the canonical store of source documents (initially, [Anchore Policy Bundles](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)), both serving as a location where pre-defined policy bundles can be easily fetched and loaded into Anchore Engine deployments to help with a starting point for creating your own bundles, as well as a location where users of Anchore can submit and share new policy bundles and, moving forward, other Anchore resources as well.
 
 ## Structure
 
-The structure of this repository is meant to facilitate a straight-forward mechanism for users to contribute new documents, or modify existing documents, with a light-weight process for translating the source documents into an indexed, static structure that can easily be hosted by any HTTP server.  By default, all documents stored here are automatically converted into such a static site, hosted publicly, and is made immediately available to any client that can communicate with the public Anchore Hub (initially, the Anchore CLI).  
+The structure of this repository is meant to facilitate a straight-forward mechanism for users to contribute new policy documents, or modify existing policy documents, with a light-weight process for translating the source documents into an indexed, static structure that can easily be hosted by any HTTP server.  By default, all policy documents stored here are automatically converted into such a static site, hosted publicly, and is made immediately available to any client that can communicate with the public Anchore Policy Hub (initially, the Anchore CLI).  
 
 The important items in this repo are as follows:
 

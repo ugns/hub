@@ -1,10 +1,10 @@
-# Anchore Hub
+# Anchore Policy Hub
 
-The Anchore Hub is a centralized repository of resources that are served and then can be loaded into/consumed by [Anchore Engine](https://github.com/anchore/anchore-engine), via anchore engine clients.  This repository serves as the canonical store of source documents (initially, [Anchore Policy Bundles](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)), both serving as a location where pre-defined policy bundles can be easily fetched and loaded into Anchore Engine deployments to help with a starting point for creating your own bundles, as well as a location where users of Anchore can submit and share new policy bundles and, moving forward, other Anchore resources as well.
+The Anchore Policy Hub is a centralized repository of resources that are served and then can be loaded into/consumed by [Anchore Engine](https://github.com/anchore/anchore-engine), via anchore engine clients.  This repository serves as the canonical store of source documents (initially, [Anchore Policy Bundles](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)), both serving as a location where pre-defined policy bundles can be easily fetched and loaded into Anchore Engine deployments to help with a starting point for creating your own bundles, as well as a location where users of Anchore can submit and share new policy bundles and, moving forward, other Anchore resources as well.
 
 ## Structure
 
-The structure of this repository is meant to facilitate a straight-forward mechanism for users to contribute new documents, or modify existing documents, with a light-weight process for translating the source documents into an indexed, static structure that can easily be hosted by any HTTP server.  By default, all documents stored here are automatically converted into such a static site, hosted publicly, and is made immediately available to any client that can communicate with the public Anchore Hub (initially, the Anchore CLI).  
+The structure of this repository is meant to facilitate a straight-forward mechanism for users to contribute new policy documents, or modify existing policy documents, with a light-weight process for translating the source documents into an indexed, static structure that can easily be hosted by any HTTP server.  By default, all policy documents stored here are automatically converted into such a static site, hosted publicly, and is made immediately available to any client that can communicate with the public Anchore Policy Hub (initially, the Anchore CLI).  
 
 The important items in this repo are as follows:
 
@@ -31,21 +31,17 @@ All bundles in this repository are automatically served via a publicly accessibl
 
 ```
 # anchore-cli policy hub list
-ame                           Description                           Updated                           
-anchore_security_only          Includes a single policy that         2019-01-25T01:08:47.518134        
-                               only performs a variety of                                              
-                               security checks.                                                        
-anchore_default_bundle         Default Anchore Engine policy         2019-01-25T01:08:47.518134        
-                               checks, single mapping for all                                          
-                               images, empty whitelist.                                                
-anchore_cis_1.13.0_base        Docker CIS 1.13.0 image               2019-01-25T01:08:47.518134        
-                               content checks, from section 4                                          
-                               and 5. NOTE: some parameters                                            
-                               (generally are named                                                    
-                               'example...') must be modified                                          
-                               as they require site-specific                                           
-                               settings                                                                
-
+Name                           Description                                                        
+anchore_security_only          Includes a single policy that only performs a variety of           
+                               security checks.                                                   
+anchore_default_bundle         Default policy bundle that comes installed with vanilla            
+                               anchore-engine deployments.  Mixture of light vulnerability        
+                               checks, dockerfiles checks, and warning triggers for common        
+                               best practices.                                                    
+anchore_cis_1.13.0_base        Docker CIS 1.13.0 image content checks, from section 4 and         
+                               5. NOTE: some parameters (generally are named 'example...')        
+                               must be modified as they require site-specific settings            
+                       
 # anchore-cli policy hub get anchore_cis_1.13.0_base 
 Policy Bundle ID: anchore_cis_1.13.0_base
 Name: anchore_cis_1.13.0_base
@@ -98,7 +94,7 @@ From here, you can now interact with the installed anchore policy bundle using a
 
 By default, when new resources are stored in this repository, or modifications are made, an automated process is executed to execute ./generate.py and serve the content via a publicly available site hosted at (TBD).  Alternatively, you may opt to run your own, internal, anchore hub using the tools in this repo, serving the data output by ./generate.py from any HTTP service you operate.  The clients (such as anchore-cli) can then be directed at this new location instead of the default public hub URL, and the rest of the operations will perform as described above. 
 
-For example, if a local hub has been populated at a local URL "http://myhost.com/anchorehub", the anchore-cli can be configured to use that location (initially looking for "http://myhost.com/anchorehub/index.json") instead of the default:
+Below is an example process for running a local anchore hub using a docker nginx container, for testing and to illustrate the general process.  Permanent installations would use a similiar process but host the generated static content in a permanent HTTP server location instead of a local nginx container location:
 
 ```
 # cd ./hub
@@ -137,9 +133,11 @@ All Done. Config used:
 /tmp/targethtml/bundles/anchore_cis_1.13.0_base/sha256:fcd085e288aefb5412cf55529fdbb8ae7c57ad3bc46946263db517e875788582.json
 /tmp/targethtml/index.json
 
-# <perform steps to host static HTTP site based on output structure above, so that http://myhost.com/anchorehub/index.json is fetchable>
+# docker run --name anchore-hub-nginx -v /tmp/targethtml/:/usr/share/nginx/html/:ro -p 8080:80 -d nginx
 
-# export ANCHORE_CLI_HUB_URL=http://myhost.com/anchorehub"
+# export ANCHORE_CLI_HUB_URL=http://localhost:8080/"
 # anchore-cli policy hub list
-<list of your locally generated hub documents>
+...
+...
+...
 ```

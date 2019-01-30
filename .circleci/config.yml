@@ -18,7 +18,7 @@ var_1: &attach_workspace
 version: 2
 jobs:
   unit_tests:
-    working_directory: ~/build/hub-dev
+    working_directory: ~/build/hub
     docker:
       - image: circleci/python:3.6
     steps:

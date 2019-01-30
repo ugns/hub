@@ -8,18 +8,18 @@ The structure of this repository is meant to facilitate a straight-forward mecha
 
 The important items in this repo are as follows:
 
-- [source/bundles](https://github.com/anchore/hub-dev/tree/master/sources/bundles): location of fully functional anchore policy bundles, ready to load as usuable anchore policy bundles.  For more information on the anchore policy bundle format/capabilities, see the [anchore policy bundles and evaluation guide](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)
-- [generate.py](https://github.com/anchore/hub-dev/blob/master/generate.py): script that converts the source documents (bundles in source/bundles) into static content, performing document format validation as well as light conversion of some items in the source documents.
+- [source/bundles](https://github.com/anchore/hub/tree/master/sources/bundles): location of fully functional anchore policy bundles, ready to load as usuable anchore policy bundles.  For more information on the anchore policy bundle format/capabilities, see the [anchore policy bundles and evaluation guide](https://anchore.freshdesk.com/support/solutions/articles/36000074705-policy-bundles-and-evaluation)
+- [generate.py](https://github.com/anchore/hub/blob/master/generate.py): script that converts the source documents (bundles in source/bundles) into static content, performing document format validation as well as light conversion of some items in the source documents.
 
 ## Submitting a New Policy 
 
 Before you being, please take care not to include any sensitive information in any documents that are submitted to this (publicly hosted) repository).  If you wish to centrally manage your own private hub, see the instructions at the end of this guide to understand how to host your own instance of an anchore hub.  To submit a new policy bundle for consideration, the process at a high level should be:
 
-1. Read and accept the terms of the [contributor agreement](https://github.com/anchore/hub-dev/blob/master/CONTRIBUTING.rst)
+1. Read and accept the terms of the [contributor agreement](https://github.com/anchore/hub/blob/master/CONTRIBUTING.rst)
 2. create/modify a anchore policy bundle, and remove any site-specific information from the bundle document ideally
 3. clone a version of this repository locally, and put your new bundle in the sources/bundles/ directory, using a unique name for the bundle that reflects it's purpose (i.e. anchore_dockerfile_bestpractive_checks.json)
 4. run the './generate.py' script locally to perform validation of the new bundle, and inspect the output bundle to ensure it is correct (by default, ./generate.py will create a static site in /tmp/targethtml for inspection/test)
-5. Create a PR with the new bundle included, including an explaination of the new bundle and it's purpose.  Be sure to sign off on the PR according the the [contributor agreement](https://github.com/anchore/hub-dev/blob/master/CONTRIBUTING.rst).
+5. Create a PR with the new bundle included, including an explaination of the new bundle and it's purpose.  Be sure to sign off on the PR according the the [contributor agreement](https://github.com/anchore/hub/blob/master/CONTRIBUTING.rst).
 
 ## Modifying an Existing Policy
 

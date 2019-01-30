@@ -1,8 +1,8 @@
 {
     "blacklisted_images": [], 
-    "description": "Includes a single policy that only performs a variety of security checks.", 
+    "description": "Single policy, single whitelist bundle for performing security checks, including example blacklist known malicious packages by name.", 
     "id": "anchore_security_only", 
-    "last_updated": 1548357738, 
+    "last_updated": 1548806387, 
     "mappings": [
         {
             "id": "c4f9bf74-dc38-4ddf-b5cf-00e9c0074611", 
@@ -17,8 +17,7 @@
             "registry": "*", 
             "repository": "*", 
             "whitelist_ids": [
-                "2cedec50-2dd9-4b0a-85ec-52dbfa62201b", 
-                "37fd763e-1765-11e8-add4-3b16c029ac5c"
+                "2cedec50-2dd9-4b0a-85ec-52dbfa62201b"
             ]
         }
     ], 
@@ -27,7 +26,7 @@
         {
             "comment": "Critical vulnerability,  secrets, dockerfile security checks, and examples of some known malicious packages.", 
             "id": "48e6f7d6-1765-11e8-b5f9-8b6f228548b6", 
-            "name": "security_checks", 
+            "name": "Security Checks", 
             "rules": [
                 {
                     "action": "STOP", 
@@ -618,14 +617,7 @@
                     "trigger_id": "*+*-dev"
                 }
             ], 
-            "name": "devpackages", 
-            "version": "1_0"
-        }, 
-        {
-            "comment": "Default global whitelist", 
-            "id": "37fd763e-1765-11e8-add4-3b16c029ac5c", 
-            "items": [], 
-            "name": "Global Whitelist", 
+            "name": "Development OS Packages", 
             "version": "1_0"
         }
     ]

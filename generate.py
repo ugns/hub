@@ -99,6 +99,10 @@ def populate_target(source_dir=None, target_dir=None, bundles={}):
     with open(manifestfile, 'w') as OFH:
         OFH.write(json.dumps(manifest, sort_keys=True, indent=4))
 
+    src_file = os.path.join(source_dir, "static", "index.html")
+    dst_file = os.path.join(target_dir, "index.html")
+    copyfile(src_file, dst_file)
+
     return(True)
 
 # environment settings
